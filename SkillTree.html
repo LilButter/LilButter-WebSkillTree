@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Skill Tree</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    </head>
+    <body>
+        <div class="slider">
+            <!-- Page 1: Skill Tree -->
+            <div class="slide" id="page1">
+                <h2>Combat Skill Tree</h2>
+                <div id="container">
+                    <h3 class="selattrtree">Selected Attributes:</h3>
+                    <ul id="final-selected-attributes2" class="listedattrtree"></ul>
+                    <button id="toggle-button"></button>
+                    <div id="skill-tree">
+                        <!-- Start button in the center -->
+                        <div class="node center" id="start-node" data-attribute="center" data-tooltip="Start">Start</div>
+                        <!-- Attack branch (Right side) -->
+                        <div class="branch attack-path">
+                            <div class="attackimg hidden node" data-attribute="attack1" data-tooltip="+1% Attack"></div>
+                            <div class="attackimg hidden node" data-attribute="attack2" data-tooltip="+2% Attack"></div>
+                        </div>
+                        <!-- Speed branch (Top side) -->
+                        <div class="branch speed-path">
+                            <div class="hidden node speedimg" data-attribute="speed1" data-tooltip="+1% Speed"></div>
+                            <div class="hidden node speedimg" data-attribute="speed2" data-tooltip="+2% Speed"></div>
+                        </div>
+                        <!-- Defense branch (Left side) -->
+                        <div class="branch defense-path">
+                            <div class="defenseimg hidden node" data-attribute="defense1" data-tooltip="+1% Defense"></div>
+                            <div class="defenseimg hidden node" data-attribute="defense2" data-tooltip="+2% Defense"></div>
+                        </div>
+                        <!-- Jump Boost branch (Bottom side) -->
+                        <div class="branch jump-boost-path">
+                            <div class="hidden jumpimg node" data-attribute="jump1" data-tooltip="+1% Jump Boost"></div>
+                            <div class="hidden jumpimg node" data-attribute="jump2" data-tooltip="+2% Jump Boost"></div>
+                        </div>
+                    </div>
+                </div>
+                <button id="next-button" class="nav-button nextbuttonimg"></button>
+            </div>
+            <!-- Page 2: Origin Selection -->
+            <div class="slide" id="page2">
+                <h2>Choose Your Origin</h2>
+                <div id="origin-selection">
+                    <!-- Origin 1 -->
+                    <div class="orgpick origin" data-origin="warrior">
+                        <h3>Warrior</h3>
+                        <p><strong>Pros:</strong> High Strength, Increased Attack</p>
+                        <p><strong>Cons:</strong> Low Speed, Vulnerable to Magic</p>
+                    </div>
+                    <!-- Origin 2 -->
+                    <div class="orgpick origin" data-origin="mage">
+                        <h3>Mage</h3>
+                        <p><strong>Pros:</strong> Powerful Spells, High Mana</p>
+                        <p><strong>Cons:</strong> Weak Defense, Low Health</p>
+                    </div>
+                    <!-- You can add more origins here -->
+                </div>
+                <button id="prev-button" class="nav-button prevbuttonimg"></button>
+                <button id="next-button2" class="nav-button nextbuttonimg"></button>
+            </div>
+            <!-- Page 3: Summary Page -->
+            <div class="slide" id="page3">
+                <h2 style="font-size: 175%; position: relative;">Summary</h2>
+                <div id="summary">
+                    <h3>Selected Attributes:</h3>
+                    <ul id="final-selected-attributes"></ul>
+                    <h3>Chosen Origin:</h3>
+                    <p id="selected-origin"></p>
+                    <button id="download-button" style="margin-top: 1vw;">Download Summary</button>
+                </div>
+                <button id="prev-button2" class="nav-button prevbuttonimg"></button>
+            </div>
+        </div>
+        <script src="script.js"></script>
+        <script src="drag.js"></script>
+        <script src="slider.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    </body>
+</html>

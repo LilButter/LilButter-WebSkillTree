@@ -1,0 +1,427 @@
+body {
+    font-family: "Minecraft", sans-serif;
+    background-color: #2E2E2E;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    user-select: none;
+
+    /* Disable text selection during drag */
+}
+
+/* Container for the entire skill tree */
+#container {
+    width: 50vw;
+
+    /* Set the initial size of the box */
+    height: 50vh;
+
+    /* Set the initial height of the box */
+    overflow: hidden;
+
+    /* Hide any content that goes outside */
+    cursor: grab;
+
+    /* Cursor shows grab hand for dragging */
+    position: relative;
+    background-color: #161616;
+
+    /* Background for skill tree */
+    border: 4px solid #727272;
+
+    /* Border for the box */
+    transition: width 0.3s ease, height 0.3s ease;
+
+    /* Smooth expand/shrink transition */
+}
+
+#container:active {
+    cursor: grabbing;
+
+    /* While dragging, show grabbing hand */
+}
+
+#skill-tree {
+    position: absolute;
+    width: 1500px;
+
+    /* Large canvas size to support panning */
+    height: 1500px;
+    transform-origin: 50% 50%;
+
+    /* Centered zoom point */
+    transition: transform 0.3s ease;
+
+    /* Smooth zoom */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.node {
+    position: absolute;
+    width: 10vw;
+
+    /* Responsive node size */
+    height: 10vw;
+
+    /* Keep nodes circular */
+    max-width: 100px;
+
+    /* Max size for larger screens */
+    max-height: 100px;
+    min-width: 50px;
+
+    /* Minimum size to ensure readability on small screens */
+    min-height: 50px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.5s, border 0.2s ease;
+    opacity: 0;
+
+    /* Hidden by default */
+}
+
+.node:hover {
+    transform: scale(1.1);
+}
+
+#start-node {
+    transform: none !important;
+}
+
+/* Disable hover effects for the Start button */
+.node.start {
+    border-color: #434443;
+    pointer-events: none;
+
+    /* Disable hover and click on Start node */
+    transform: none !important;
+
+    /* Disable hover transform effect */
+}
+
+/* Tooltip styling */
+.node:hover:after {
+    content: attr(data-tooltip);
+
+    /* Get tooltip content from data-tooltip attribute */
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    white-space: nowrap;
+    font-size: 12px;
+    z-index: 1;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+}
+
+/* Positions for attack, defense, speed, jump boost */
+.branch {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+/* Responsive positions for attack, defense, speed, jump boost */
+.attack-path {
+    position: absolute;
+    left: 60%;
+    top: 53.5%;
+}
+
+.defense-path {
+    position: absolute;
+    left: 39%;
+    top: 53.5%;
+}
+
+.speed-path {
+    position: absolute;
+    top: 43%;
+    left: 50%;
+}
+
+.jump-boost-path {
+    position: absolute;
+    bottom: 36%;
+    left: 50%;
+}
+
+/* Slider container */
+.slider {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Slide pages */
+.slide {
+    width: 100vw;
+    height: 100vh;
+    flex-shrink: 0;
+    display: none;
+
+    /* Hide all slides by default */
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+    background: linear-gradient(90deg, #0f0c29, #302b63, #24243e);
+    background-image: url('assets/img/dirt.png');
+}
+
+.slide.active {
+    display: flex;
+
+    /* Show only the active slide */
+}
+
+/* Navigation buttons */
+.nav-button {
+    position: relative;
+    padding: 10px 20px;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    z-index: 10;
+    top: 1.2vh;
+}
+
+.nav-button:hover {
+    background-color: #111111;
+    box-shadow: 1px 1px 3px 3px #1b1b1b;
+}
+
+/* Pop-out styling for +2% nodes (adjust to fit within bounds) */
+.attack-path .node:nth-child(2) {
+    left: 130px;
+
+    /* Position next to +1% Attack but responsive */
+}
+
+.defense-path .node:nth-child(2) {
+    left: -130px;
+
+    /* Position next to +1% Defense but responsive */
+}
+
+.speed-path .node:nth-child(2) {
+    top: -180px;
+
+    /* Position next to +1% Speed but responsive */
+}
+
+.jump-boost-path .node:nth-child(2) {
+    top: 80px;
+
+    /* Position next to +1% Jump Boost but responsive */
+}
+
+/* Points and summary styling */
+#points {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+}
+
+#summary {
+    position: relative;
+    text-align: center;
+}
+
+#selected-attributes {
+    list-style-type: none;
+    padding: 0;
+    font-size: 18px;
+}
+
+/* Expand/Shrink toggle button */
+#toggle-button {
+    padding: 18px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    z-index: 10;
+    background-image: url('assets/img/Expandicon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: rgba(0, 0, 0, 0);
+    right: 10px;
+    position: absolute;
+    top: 10px;
+}
+
+#toggle-button:hover {
+    background-color: rgba(255, 255, 255, 0);
+}
+
+/* Media query for smaller screens */
+@media (max-width: 600px) {
+    #skill-tree {
+        width: 80vw;
+        height: 80vw;
+    }
+
+    .node {
+        width: 8vw;
+        height: 8vw;
+    }
+
+    /* Adjust positions on smaller screens */
+    .attack-path {
+        left: 65%;
+        top: 50%;
+    }
+
+    .defense-path {
+        left: 15%;
+        top: 50%;
+    }
+
+    .speed-path {
+        top: 15%;
+        left: 50%;
+    }
+
+    .jump-boost-path {
+        bottom: 15%;
+        left: 50%;
+    }
+}
+
+.attackimg {
+    background-image: url('assets/img/attackup.png');
+    background-size: contain;
+    border: 4px solid #b52d2d;
+}
+
+.attackimg.selected {
+    background-image: url('assets/img/attackupselected.png');
+    background-size: contain;
+    border: 2px solid #541c1c;
+
+    /* Outline the selected nodes */
+}
+
+.speedimg {
+    background-image: url('assets/img/Speedup.png');
+    background-size: contain;
+    border: 4px solid #beaa25;
+}
+
+.speedimg.selected {
+    background-image: url('assets/img/Speedupselected.png');
+    background-size: contain;
+    border: 2px solid #786b15;
+
+    /* Outline the selected nodes */
+}
+
+.jumpimg {
+    background-image: url('assets/img/Jumpup.png');
+    background-size: contain;
+    border: 4px solid #4cbe25;
+}
+
+.jumpimg.selected {
+    background-image: url('assets/img/Jumpupselected.png');
+    background-size: contain;
+    border: 2px solid #2c6c16;
+
+    /* Outline the selected nodes */
+}
+
+.defenseimg {
+    background-image: url('assets/img/defenseup.png');
+    background-size: contain;
+    border: 4px solid #2da0bc;
+}
+
+.defenseimg.selected {
+    background-image: url('assets/img/defenseupselected.png');
+    background-size: contain;
+    border: 2px solid #195665;
+
+    /* Outline the selected nodes */
+}
+
+.selattrtree {
+    position: absolute;
+    display: flex;
+    left: 10px;
+    top: 1px;
+}
+
+.listedattrtree {
+    position: absolute;
+    top: 40px;
+    left: 3px;
+}
+
+.nextbuttonimg {
+    background-image: url('assets/img/NExtbutton.png');
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    padding: 1.7vh 4vw !important;
+    background-position: center center;
+    border-radius: 5px;
+    box-shadow: inset -1px -1px 1px 1px #1d1d1d;
+}
+
+.prevbuttonimg {
+    background-image: url('assets/img/Prevbutton.png');
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    padding: 1.7vh 5.5vw !important;
+    background-position: center center;
+    border-radius: 5px;
+    box-shadow: inset -1px -1px 1px 1px #1d1d1d;
+    right: 0px;
+    top: 125px;
+    font-size: 100%;
+}
+
+.prevbuttonimg:hover {
+    background-color: #111111;
+    box-shadow: 1px 1px 3px 3px #1b1b1b;
+}
+
+.orgpick {
+    background-color: #161616;
+    outline: 4px solid #6f6f6f;
+    padding: 1vw;
+    margin-bottom: 2vw;
+}
+
+.orgpicked {
+    outline: 4px solid #f2f2f2;
+}
